@@ -552,3 +552,163 @@ main()
   * Tenga en cuenta que no necesitamos especificar el tipo de un argumento.
 
 * Podemos crear variables globales inicializándolas fuera de ***main***, aunque Python no tiene constantes.
+# Mario
+* Podemos imprimir una fila de simbolos de numeral en pantalla:
+    ```python
+    from cs50 import get_int
+
+    n = get_int("Altura: ")
+
+    for i in range(n):
+        print("#")
+    ```
+    ```
+    $ python mario.py
+    Altura: -1
+    ```  
+   * Si el usuario ingresa un número negativo, no vemos ningún resultado. En su lugar, deberíamos volver a preguntar al usuario.
+* En Python, no hay bucle do while, pero podemos hacer el mismo efecto:
+    ```python
+    from cs50 import get_int
+
+    while True:
+        n = get_int("Altura: ")
+        if n > 0:
+            break
+
+    for i in range(n):
+        print("#")
+    ```
+    * Escribiremos un bucle infinito, por lo que haremos una acción al menos una vez, y luego usaremos `break` para salir del bucle si cumplimos alguna condición. 
+* Podemos usar una función para apoyarnos:
+    ```python
+    from cs50 import get_int
+
+    def main():
+        altura = get_altura()
+        for i in range(altura):
+            print("#")
+
+    def get_altura():
+        while True:
+            n = get_int("Altura: ")
+            if n > 0:
+                break
+        return n
+
+    main()
+    ```
+    * Nuestra función `get_altura()` devolverá n después de que se cumpla nuestra condición. Hay que tener en cuenta que en Python, las variables están en el ámbito de una función, lo que significa que podemos usarlas fuera del bucle en el que se crean.
+* Podemos usar `input` nosotros mismos:
+    ```python
+    def main():
+        altura = get_altura()
+        for i in range(altura):
+            print("#")
+    
+    def get_altura():
+        while True:
+            n = int(input("Altura: "))
+            if n > 0:
+                break
+        return n
+    
+    main()
+    ```
+    ```
+    $ python mario.py
+    Altura: cat
+    Traceback (most recent call last):
+    File "/workspaces/20377622/mario.py", line 13, in <module>
+        main()
+    File "/workspaces/20377622/mario.py", line 2, in main
+        altura = get_altura()
+    File "/workspaces/20377622/mario.py", line 8, in get_altura
+        n = int(input("Altura: "))
+    ValueError: invalid literal for int() with base 10: 'cat'
+    ```
+    * Si no obtenemos una entrada válida, nuestro rastreo muestra la pila de funciones que condujeron a la excepción.
+* Intentaremos (`try`) convertir la entrada en un número entero e imprimir (`print`) un mensaje si hay una excepción. Pero no necesitamos salir, ya que nuestro bucle volverá a avisar al usuario. Si no hay una excepción, continuaremos verificando si el valor es positivo y romperemos (`break`) si es así:
+    ```python
+    def main():
+        altura = get_altura()
+        for i in range(altura):
+            print("#")
+    
+    def get_altura():
+        while True:
+            try:
+                n = int(input("Altura: "))
+                if n > 0:
+                    break
+            except ValueError:
+                print("Ese no es un entero!")
+        return n
+    
+    main()
+    ```
+    * Ahora podemos intentar imprimir signos de interrogación en la misma línea:
+    ```python
+    for i in range(4):
+        print("?", end="")
+    print()
+    ```
+    ```
+    $ python mario.py
+    ????
+    ```
+    * Cuando imprimimos cada signo de interrogación, no queremos la nueva línea automáticamente, por lo que podemos pasar un **argumento con nombre**, también conocido como argumento de palabra clave, a la función de impresión(`print`). (Hasta ahora, solo hemos visto **argumentos posicionales**, donde los argumentos se establecen en función de su posición en la llamada de función).
+    * Aquí, pasamos `end=""` para especificar que no se debe imprimir nada al final de nuestra cadena. Si observamos la documentación para imprimir (`print`), veremos que el valor predeterminado para `end` es `\n`, una nueva línea.
+    * Finalmente, después de imprimir nuestra fila con el bucle, podemos llamar a `print` sin otros argumentos para obtener una nueva línea.
+* También podemos usar el operador de multiplicación para unir una cadena consigo misma muchas veces e imprimirla directamente con: `print("?" * 4)`.
+* También podemos implementar bucles anidados:
+```python
+for i in range(3):
+    for j in range(3):
+        print("#", end="")
+    print()
+```
+```
+$ python mario.py
+###
+###
+###
+```
+# Documentación
+* La documentación oficial de Python incluye referencias para funciones integradas.
+* Podemos usar la función de búsqueda para encontrar una página sobre funciones que vienen con cadenas, por ejemplo, incluida la función `lower()` para convertir una cadena a minúsculas. En la misma página, veremos muchas otras funciones, aunque no debemos preocuparnos por aprenderlas todas inmediatamente. 
+# Listas, cadenas
+* Podemos crear una lista:
+    ```python
+    notas = [72, 73, 33]
+
+    promedio = sum(notas) / len(notas)
+    print(f"Promedio: {promedio}")
+    ```
+    * Podemos usar `sum`, una función integrada en Python, para sumar los valores de nuestra lista y dividirla por el número de notas, usando la función `len` para obtener la longitud de la lista.
+* Podemos agregar elementos a una lista con:
+    ```python
+    from cs50 import get_int
+
+    notas = []
+    for i in range(3):
+        nota = get_int("Nota: ")
+        notas.append(nota)
+    
+    promedio = sum(notas) / len(notas)
+    print(f"Promedio: {promedio}")
+    ```
+    * Con el método `append`, una función integrada en los objetos de lista, podemos agregar nuevos valores a las `notas`.
+    * También podemos unir dos listas con `notas += [nota]`. Tenga en cuenta que necesitamos poner `nota` en una lista propia.
+* Podemos iterar sobre cada carácter en una cadena:
+    ```python
+    from cs50 import get_string
+
+    antes = get_string("Antes:  ")
+    print("Despues:  ", end="")
+    for c in antes:
+        print(c.upper(), end="")
+    print()
+    ```
+    * Python iterará sobre cada carácter de la cadena para nosotros con solo `for c in antes:`.
+* Para poner una cadena en mayúsculas, también podemos simplemente escribir `despues = antes.upper()`, sin tener que iterar sobre cada carácter nosotros mismos.
