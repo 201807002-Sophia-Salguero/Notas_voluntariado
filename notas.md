@@ -29,9 +29,7 @@ print("Hello, world");
 * En Scratch y C, podríamos haber tenido múltiples funciones
 ---
 
-colocar la imagen jej
-
-![](User/MAHALA/Desktop/notas voluntariado/subir foto.jpg)
+![](/subirfoto.jpg)
 
 ----
 
