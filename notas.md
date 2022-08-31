@@ -1,16 +1,16 @@
 # **Lectura 6**
 
-* Sintaxis de Python
-* Librerias
-* Entrada, condiciones
-  * Meow
-* Mario
-* Documentación
-* Listas, cadenas
-* Argumentos de línea de comandos, códigos de salida
-* Algoritmos
-* Archivos
-* Más librerias
+* [Sintaxis de Python](#sintaxis-de-python)
+* [Librerias](#librerias)
+* [Entrada, condiciones](#input-conditions-entradas-condiciones)
+  * [Meow](#meow)
+* [Mario](#mario)
+* [Documentación](#documentación)
+* [Listas, cadenas](#listas-cadenas)
+* [Argumentos de línea de comandos, códigos de salida](#argumentos-de-línea-de-comandos-códigos-de-salida)
+* [Algoritmos](#algoritmos)
+* [Archivos](#archivos)
+* [Más librerias](#más-librerias)
 
 # **Sintaxis de Python**
 
@@ -712,3 +712,342 @@ $ python mario.py
     ```
     * Python iterará sobre cada carácter de la cadena para nosotros con solo `for c in antes:`.
 * Para poner una cadena en mayúsculas, también podemos simplemente escribir `despues = antes.upper()`, sin tener que iterar sobre cada carácter nosotros mismos.
+
+# **Argumentos de línea de comandos, códigos de salida**
+- Podemos tomar argumentos de línea de comandos con:
+
+    ```python
+        from sys import argv
+
+        if len(argv) == 2:
+            print(f"hola, {argv[1]}")
+        else:
+            print("hola, mundo")
+    ```
+    ```
+        $ python argv.py
+        hola, mundo
+        $ python argv.py David
+        hola, David
+    ```
+
+    * Importamos `argv` desde `sys` , el módulo del sistema, integrado en Python. 
+ 
+    * Dado que `argv` es una lista, podemos obtener el segundo elemento com `argv[1]`.
+
+    * `argv[0]` sería el nombre de nuestro programa, como `argv.py` y no Python.
+
+
+- También podemos dejar que Python itere sobre la lista por nosotros:
+
+    ```python
+    from sys import argv
+
+    for arg in argv:
+        print(arg)
+    ```
+    ```
+    $ python argv.py
+    argv.py
+    $ python argv.py foo bar baz
+    argv.py
+    foo
+    bar
+    baz
+    ```
+    - Con Python, podemos empezar en un índice diferente en una lista:
+        
+        ```python
+        for arg in argv[1: ]:
+            print(arg)
+        ```
+        - Esto nos permite **dividir** la lista desde 1 hasta el final.
+        - Podemos escribir ```argv[:-1]``` para obtener todo lo que hay en la lista, excepto el último elemento.
+- También podemos devolver códigos de salida cuando nuestro programa finaliza:
+
+    ```python
+    from sys import argv, exit
+
+    if len(argv) != 2:
+        print("Falta el argumento de la línea de comandos")
+        exit(1)
+
+    print(f"hola, {argv[1]}")
+    exit(0)
+    ```
+    * Ahora, podemos usar `exit()` para salir de nuestro programa con un código específico.
+* Podemos importar toda la biblioteca `sys` y dejar claro en nuestro programa de dónde provienen estas funciones:
+    ```python
+    import sys
+
+    if len(sys.argv) != 2:
+        print("Falta el argumento de la línea de comandos")
+        sys.exit(1)
+      
+    print(f"hola, {sys.argv[1]}")
+    sys.exit(0)
+    ```
+    ```
+    $ python exit.py
+    Falta el argumento de la línea de comandos
+    $ python exit.py David
+    hola, David
+    ```
+
+# **Algoritmos**
+- Podemos tomar argumentos de línea de comandos con:
+
+    ```python
+    import sys
+
+    numeros = [4, 6, 8, 2, 7, 5, 0]
+
+    if 0 in numeros:
+        print("Encontrado")
+        sys.exit(0)
+
+    print("No encontrado")
+    sys.exit(1)
+    ```
+    * Con `if 0 en numeros:`, le estamos pidiendo a Python que verifique la lista por nosotros.
+*  Una lista de cadenas, también, se puede buscar con:
+    ```python
+    import sys
+
+    nombres = ["Bill", "Charlie", "Fred", "George", "Ginny", "Percy", "Ron"]
+
+    if Ron in nombres:
+        print("Encontrado")
+        sys.exit(0)
+
+    print("No encontrado")
+    sys.exit(1)
+    ```
+* Si tenemos un diccionario, un conjunto de pares clave-valor, también podemos verificar una clave en particular y ver el valor almacenado para ella:
+    ```python
+    from cs50 import get_string
+
+    personas = {
+        "Carter" : "+1-617-495-1000",
+        "David" : "+1-949-468-2750"
+    }
+
+    nombre = get_string("Nombre: ")
+    if nombre in personas:
+        numero = persona[nombre]
+        print(f"Numero: {numero}")
+    ```
+    ```
+    $ python guiatelefonica.py
+    Nombre: David
+    Numero: +1-949-468-2750
+    ```
+* Primero declaramos un diccionario, `personas`, donde las claves son cadenas de cada nombre que queremos almacenar, y el valor de cada clave es una cadena de un número de teléfono correspondiente.
+
+* Luego, usamos `if nombre in personas:` para buscar un nombre en las claves de nuestro diccionario. Si la clave existe, entonces podemos obtener el valor con la notación de paréntesis, `personas[nombre]`.
+
+# **Archivos**
+- Abramos un archivo CSV, con valores separados por comas:
+
+    ```python
+    import csv
+    from cs50 import get_string
+
+    file = open("guiatelefonica.csv", "a")
+
+    nombre = get_string("Nombre: ")
+    numero = get_string("Numero: ")
+
+    escritor = csv.escritor(file)
+    escritor.filaescritor([nombre, numero])
+
+    file.close()
+    ```
+    ```
+    $ python guiatelefonica.py
+    Nombre: Carter
+    Numero: +1-617-495-1000
+    $ls
+    guiatelefonica.csv guiatelefonica.py
+    ```
+    * Resulta que Python también tiene una biblioteca `csv` que nos ayuda a trabajar con archivos CSV, por lo que después de abrir el archivo para agregarlo, podemos llamar a `escritor` para crear un objeto de `escritor` a partir del archivo. Luego, podemos usar un método dentro, `escritor.filaescritor`, para escribir una lista como una fila.
+
+*  Nuestro archivo `guiatelefonica.csv` tendrá nuestros datos:
+    ```
+     Carter, +1-617-495-1000
+    ```
+    * Podemos volver a ejecutar nuestro programa y ver cómo se agregan nuevos datos a nuestro archivo.
+
+* Podemos usar la palabra clave `with`, que cerrará el archivo una vez que hayamos terminado:
+
+    ```python
+    ...
+    with open("guiatelefonica.csv", "a") as file:
+        escritor = csv.escritor(file)
+        escritor.filaescritor((nombre, numero))
+    ```
+* Visitaremos un Formulario de Google y seleccionaremos una [`"casa"`](https://harrypotter.fandom.com/wiki/Hogwarts_Houses) en la que nos gustaría estar.
+
+* Descargaremos los datos como un archivo CSV, que se ve así:
+    ```
+    Timestamp, House
+    10/13/2021 16:00:07, Ravenclaw
+    10/13/2021 16:00:07, Gryffindor
+    10/13/2021 16:00:09, Ravenclaw
+    10/13/2021 16:00:10, Gryffindor
+    10/13/2021 16:00:10, Gryffindor
+    ...
+    ```
+* Ahora podemos contar el número de veces que una casa aparece:
+    ```python
+        import csv
+
+        casas = {
+        "Gryffindor": 0,
+        "Hufflepuff": 0,
+        "Ravenclaw": 0,
+        "Slytherin": 0
+        }
+
+        with open("hogwarts.csv", "r") as file:
+        lector = csv.lector(file)
+        next(lector)
+        for fila in lector:
+            casa = fila[1]
+            casas[casa] += 1
+        for casa in casas:
+        contador = casas[casa]
+        print(f"{casa}: {contador}")
+    ```
+    * Usamos la función de `lector` de la libreria `csv`, omitimos la fila del encabezado con `next(lector)` y luego iteramos sobre cada una de las filas restantes.
+
+    * El segundo elemento de cada fila, `fila[1]`, es la cadena de una casa, por lo que podemos usar eso para acceder al valor almacenado en `casas` para esa clave, y agregarle uno con `casas[casa] += 1`.
+
+    * Finalmente, imprimiremos el conteo de cada casa.
+
+* Podemos mejorar nuestro programa leyendo cada fila como un diccionario, usando la primera fila en el rchivo como las claves para cada valor:
+    ```python
+    ...
+    with open("hogwarts.csv", "r") as file:
+        lector = csv.Dictlector(file)
+        for fila in lector:
+            casa = fila["Casa"]
+            casas[casa] += 1
+    ...
+    ```
+    * Ahora, podemos decir `casa = fila["Casa"]` para obtener el valor en esa columna.  
+
+# **Más librerias**
+- En nuestra propia Mac o PC, podemos usar otra libreria para convertir texto a voz (ya que VS Code en la nube no admite audio):
+    ```python
+       import pyttsx3
+
+       motor = pyttsx3.init()
+       motor.dice("hola, mundo")
+       motor.correyEspera()
+    ```
+    * Al leer la documentación, podemos usar una libreria de Python llamada `pyttsx3` para reproducir algunas cadenas como audio.
+    * Incluso podemos pasar una cadena de formato con `engine.dice(f"hola, {nombre}")` para decir alguna entrada.
+* Podemos usar otra libreria, `reconocimiento_facial`, para encontrar rostros en imágenes con [`detect.py`](https://cdn.cs50.net/2021/fall/lectures/6/src6/6/faces/detect.py?highlight):
+    ```python
+       # Encuentra caras en la imagen
+       # https://github.com/ageitgey/face_recognition/blob/master/examples/find_faces_in_picture.py
+
+       from PIL import Imagen
+       import reconocimiento_facial
+
+       # Cargue el archivo jpg en una matriz numpy
+       imagen = reconocimiento_facial.carga_imagen_file("oficina.jpg")
+
+       # Encuentre todas las caras en la imagen usando el modelo basado en HOG predeterminado.
+       # Este método es bastante preciso, pero no tanto como el modelo CNN y no acelerado por GPU.
+       # Ver también: reconocimiento_facial_en_imagen_cnn.py
+       ubicaciones_de_rostros = reconocimiento_facial. ubicaciones_de_rostros(imagen)
+
+       for ubicacion_de_rostro in ubicaciones_de_rostros:
+
+        # Imprime la ubicación de cada rostro en esta imagen.
+        arriba, derecha, abajo, izquierda = ubicacion_de_rostro
+
+        # Puede acceder a la cara real en sí misma de esta manera:
+        cara_imagen = imagen[arriba:abajo, izquierda:derecha]
+        pil_imagen = Imagen.delamatriz(cara_imagen)
+        pil_imagen.show()
+    ```
+* En [`reconocer.py`](https://cdn.cs50.net/2020/fall/lectures/6/src6/6/faces/recognize.py), podemos ver un programa que encuentra una coincidencia para una cara en particular.
+* En [`listen0.py`](https://cdn.cs50.net/2021/fall/lectures/6/src6/6/listen/listen0.py?highlight), podemos responder a la entrada del usuario:
+    ```python
+       # Reconoce un saludo
+
+       # Obtener entrada
+       palabras = input(¡Di algo!\n).lower()
+
+       # Responder al discurso
+       if "hola" en palabras:
+        print("¡Hola a ti también!")
+       elif "como estas" en palabras:
+        print("¡Estoy bien, gracias!")
+       elif "adios" en palabras:
+        print("¡Adiós a ti también!")
+       else:
+        print("¿Eh?")
+    ```
+* Podemos reconocer la entrada de audio de un micrófono y responder con [`listen2.py`](https://cdn.cs50.net/2021/fall/lectures/6/src6/6/listen/listen2.py?highlight):
+    ```python
+       # Responde a un saludo
+       # https://pypi.org/project/SpeechRecognition/
+
+       import reconocimiento_de_voz
+
+       # Obtener audio desde el micrófono
+       reconocedor = reconocimiento_de_voz.Reconocedor()
+       with reconocimiento_de_voz.Microfono() as fuente:
+            print("Di algo:")
+            audio = reconocedor.escuchar(fuente)
+
+       # Reconocer el habla usando el reconocimiento de voz de Google
+       palabras = reconocedor.reconoce_google (audio)
+
+       # Responder al discurso
+       if "hola" en palabras:
+        print("¡Hola a ti también!")
+       elif "como estas" en palabras:
+        print("¡Estoy bien, gracias!")
+       elif "adios" en palabras:
+        print("¡Adiós a ti también!")
+       else:
+        print("¿Eh?")
+    ```
+* Podemos incluso agregar más lógica para escuchar un nombre:
+    ```python
+       # Responde a un nombre
+       # https://pypi.org/project/SpeechRecognition/
+
+       import re
+       import reconocimiento_de_voz
+
+       # Obtener audio desde el micrófono
+       reconocedor = reconocimiento_de_voz.Reconocedor()
+       with reconocimiento_de_voz.Microfono() as fuente:
+            print("Di algo:")
+            audio = reconocedor.escuchar(fuente)
+
+       # Reconocer el habla usando el reconocimiento de voz de Google
+       palabras = reconocedor.reconoce_google (audio)
+
+       # Responder al discurso
+       coincidencias = re.buscar("mi nombre es (.*)", palabras)
+       if coincide:
+        print(f"Hey, {coincidencias[1]}.")
+      else:
+        print("Hey, tú")
+    ```
+* Podemos crear un [`código QR`](https://en.wikipedia.org/wiki/QR_code), o un código de barras bidimensional, con otra librería:
+    ```python
+       import os
+       import qrcode
+
+       img = qrcode.hacer("https://youtu.be/xvFZjo5PgG0")
+       img.guardar("qr.png", "PNG")
+       os.system("open qr.png")
+    ```
